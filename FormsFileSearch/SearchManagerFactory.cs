@@ -49,9 +49,14 @@ namespace TheSeeker.Forms
             return new SearchResults<TResult>(resultsList);
         }
 
+        /// <summary>
+        /// Returns a suitable search engine
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         protected ISearchEngine<TResult> GetSearchEngine<TResult>()
         {
-            
+            // Get search engine from configuration
             Type type = Type.GetType(searchEngineClassString, true);
 
             try

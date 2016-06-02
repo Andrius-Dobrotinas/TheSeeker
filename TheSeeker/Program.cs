@@ -20,6 +20,7 @@ namespace TheSeeker.Forms
 
             try
             {
+                // Can use different ways of displaying/handling of search results
                 Type type = Type.GetType(ConfigurationManager.AppSettings["SearchManagerFactory"]);
 
                 ISearchManagerFactory factory = (ISearchManagerFactory)Activator.CreateInstance(type);
@@ -32,7 +33,7 @@ namespace TheSeeker.Forms
             }
 
             try
-            { 
+            {
                 Application.Run(new SearchForm(searchManager));
             }
             catch (Exception e)
