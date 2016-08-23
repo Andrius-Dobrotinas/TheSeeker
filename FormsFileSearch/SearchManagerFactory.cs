@@ -23,7 +23,7 @@ namespace TheSeeker.Forms
             ISearchEngine<FileSystemInfo> searchEngine = GetSearchEngine<FileSystemInfo>();
 
             ISearchResultsConsumerControl<FileSystemInfo> searchResultsOutput = new FileSearchResultsForm();
-            IOperationTracker operationTracker = new OperationIntervalClock(listRefreshInterval);
+            IOperationTracker operationTracker = new OperationIntervalClock(listRefreshInterval); //move out.
             ISearchResults<FileSystemInfo> searchResults = GetSearchResults<FileSystemInfo>(searchResultsOutput, operationTracker);
 
             ISearchEngineWrapper<FileSystemInfo> searchEngineWrapper = new SearchEngineWrapper<FileSystemInfo>(searchEngine);

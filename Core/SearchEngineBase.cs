@@ -5,11 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-// MOVE FileSearchEngine implementations to a separate project! Separate them from these base classes!
 namespace TheSeeker
 {
     /// <summary>
-    /// Base SearchEngine implementation with methods for calling event handlers
+    /// Base SearchEngine implementation with methods for calling event handlers.
+    /// Thread unsafe in terms of event un/subscription in for better performance
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     public abstract class SearchEngineBase<TResult> : ISearchEngine<TResult>

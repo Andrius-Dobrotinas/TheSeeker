@@ -46,13 +46,6 @@ namespace TheSeeker
                     OnSearchException(e);
                 }
             }
-
-            //while ((files = i.EnumerateFiles(searchPattern, SearchOption.AllDirectories).Take(10)).Count() > 0)
-
-            //Parallel.ForEach(i.EnumerateFiles(searchPattern, SearchOption.AllDirectories), (file) =>
-            //{
-
-            //});
         }
     }
 }

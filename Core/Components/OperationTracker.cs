@@ -14,9 +14,10 @@ namespace TheSeeker
 
         public virtual void Stop()
         {
-            if (Finished != null)
+            Action finished = Finished;
+            if (finished != null)
             {
-                Finished();
+                finished();
             }
         }
     }
