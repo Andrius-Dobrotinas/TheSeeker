@@ -7,13 +7,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheSeeker", "TheSeeker\TheS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{9652F0B6-DB64-43A2-9372-CE6B37127DBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsFileSearch", "FormsFileSearch\FormsFileSearch.csproj", "{FB77FD04-0670-4F53-9C02-F44403BCCB08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsFileSearchConsumer", "FormsFileSearchConsumer\FormsFileSearchConsumer.csproj", "{FB77FD04-0670-4F53-9C02-F44403BCCB08}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSearchEngine", "FileSearchEngine\FileSearchEngine.csproj", "{C0DD0FBF-6CAB-4931-904F-9E481C6F4BAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Factory", "Factory\Factory.csproj", "{7031CDB7-CA61-4894-8CC0-BD2789E7F677}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsSearchResults", "FormsSearchResults\FormsSearchResults.csproj", "{35E7EEE3-D9A6-44C7-B9DA-42195E163AE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SearchEngines", "SearchEngines", "{54B023B4-0AAC-4D3B-B014-11030EF2CA9A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SearchResultsConsumers", "SearchResultsConsumers", "{8466B78E-1CC8-4BC5-9BC9-F3BD29692195}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +52,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FB77FD04-0670-4F53-9C02-F44403BCCB08} = {8466B78E-1CC8-4BC5-9BC9-F3BD29692195}
+		{C0DD0FBF-6CAB-4931-904F-9E481C6F4BAA} = {54B023B4-0AAC-4D3B-B014-11030EF2CA9A}
 	EndGlobalSection
 EndGlobal
