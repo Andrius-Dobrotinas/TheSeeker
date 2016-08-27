@@ -6,8 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TheSeeker.Forms;
 
-namespace TheSeeker.Forms
+namespace TheSeeker.FileSystem.Forms
 {
     /// <summary>
     /// Works with FileInfo and DirectoryInfo types. Not a good way, but I cannot override FileInfo and make
