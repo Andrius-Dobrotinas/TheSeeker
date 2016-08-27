@@ -7,8 +7,8 @@
     <ProjectGuid>{FB77FD04-0670-4F53-9C02-F44403BCCB08}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TheSeeker.Forms</RootNamespace>
-    <AssemblyName>FormsFileSearch</AssemblyName>
+    <RootNamespace>TheSeeker.FileSystem.Forms</RootNamespace>
+    <AssemblyName>FormsFileSearchConsumer</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

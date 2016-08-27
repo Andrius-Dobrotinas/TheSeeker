@@ -13,6 +13,6 @@ namespace TheSeeker.Configuration
         /// <summary>
         /// Node name in application configuration file
         /// </summary>
-        internal const string Name = "FormDisplaySearchResultsSettings";
+        internal const string Name = "CurrentFormsSearchConfiguration";
     }
 }
