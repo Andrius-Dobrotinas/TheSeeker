@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TheSeeker
+namespace TheSeeker.Forms
 {
-    public interface ISearchManagerFactory
+    /// <summary>
+    /// Factory for creating search managers 
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    public interface ISearchManagerFactory<TResult, TConsumer> where TConsumer : ISearchResultsConsumer<TResult>
     {
-        ISearchManager CreateSearchManager();
+        ISearchManager Create(ISearchEngine<TResult> searchEngine, TConsumer searchResultsOutput, IOperationTracker operationTracker);
     }
 }

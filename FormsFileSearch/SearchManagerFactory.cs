@@ -1,82 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using System.Configuration;
 
 namespace TheSeeker.Forms
 {
-    public class SearchManagerFactory : ISearchManagerFactory
-    {
-        private int listRefreshInterval;
-        private string searchEngineClassString;
-
-        public SearchManagerFactory()
+    public class SearchManagerFactory<TResult, TConsumer> : ISearchManagerFactory<TResult, TConsumer> where TConsumer : ISearchResultsConsumerControl<TResult>
+    {        
+        public ISearchManager Create(ISearchEngine<TResult> searchEngine, TConsumer searchResultsConsumer, IOperationTracker operationTracker)
         {
-            ReadConfiguration();
-        }
+            var resultsList = new BindingList2<TResult>(operationTracker, searchResultsConsumer);
+            ISearchResults<TResult> searchResults = new SearchResults<TResult>(resultsList);
 
-        public ISearchManager CreateSearchManager()
-        {
-            ISearchEngine<FileSystemInfo> searchEngine = GetSearchEngine<FileSystemInfo>();
-
-            ISearchResultsConsumerControl<FileSystemInfo> searchResultsOutput = new FileSearchResultsForm();
-            IOperationTracker operationTracker = new OperationIntervalClock(listRefreshInterval); //move out.
-            ISearchResults<FileSystemInfo> searchResults = GetSearchResults<FileSystemInfo>(searchResultsOutput, operationTracker);
-
-            ISearchEngineWrapper<FileSystemInfo> searchEngineWrapper = new SearchEngineWrapper<FileSystemInfo>(searchEngine);
+            ISearchEngineWrapper<TResult> searchEngineWrapper = new SearchEngineWrapper<TResult>(searchEngine);
 
             searchEngine.ItemFoundHandler += (file) => searchResults.Add(file);
 
+            // Move this out??
             searchEngineWrapper.SearchStarted += () => {
-                searchResultsOutput.ReInitialize();
-                searchResultsOutput.Status = "Searching...";
+                searchResultsConsumer.ReInitialize();
+                //operationTracker.Start()?
+                searchResultsConsumer.Status = "Searching...";
             };
 
             searchEngineWrapper.SearchFinished += (source, timeElapsed) => {
                 operationTracker.Stop();
-                searchResultsOutput.Status = $"Search finished ({timeElapsed})";
+                searchResultsConsumer.Status = $"Search finished ({timeElapsed})";
             };
 
             return new SearchManager(searchEngineWrapper, searchResults);
-        }
-
-        protected ISearchResults<TResult> GetSearchResults<TResult>(IDataConsumerControl<TResult> searchResultsOutput, IOperationTracker operationTracker)
-        {
-            var resultsList = new BindingList2<TResult>(operationTracker, searchResultsOutput);
-            return new SearchResults<TResult>(resultsList);
-        }
-
-        /// <summary>
-        /// Returns a suitable search engine
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <returns></returns>
-        protected ISearchEngine<TResult> GetSearchEngine<TResult>()
-        {
-            // Get search engine from configuration
-            Type type = Type.GetType(searchEngineClassString, true);
-
-            try
-            {
-                return Activator.CreateInstance(type) as ISearchEngine<TResult>;
-            }
-            catch (Exception e)
-            {
-                throw new TypeInitializationException(searchEngineClassString, e);
-            }
-        }
-
-        protected void ReadConfiguration()
-        {
-            string assemblyName = System.Reflection.Assembly.GetCallingAssembly().GetName().Name;
-
-            var config = ConfigurationManager.GetSection(assemblyName) as ConfigSection;
-
-            listRefreshInterval = config.ListRefreshInterval;
-            searchEngineClassString = config.SearchEngine;
         }
     }
 }

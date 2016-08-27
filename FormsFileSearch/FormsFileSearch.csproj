@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TheSeeker.Forms</RootNamespace>
-    <AssemblyName>FileSearchResults</AssemblyName>
+    <AssemblyName>FormsFileSearch</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -40,9 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\BindingList2.cs" />
-    <Compile Include="ConfigSection.cs" />
-    <Compile Include="Interfaces\Common\ISyncInvoke.cs" />
-    <Compile Include="Interfaces\IDataConsumerControl.cs" />
     <Compile Include="SearchManagerFactory.cs" />
     <Compile Include="FormsHelper.cs" />
     <Compile Include="Forms\FileSearchResultsForm.cs">
@@ -54,7 +51,6 @@
     <Compile Include="Forms\SearchResultsForm.Designer.cs">
       <DependentUpon>SearchResultsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\ISearchResultsConsumerControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

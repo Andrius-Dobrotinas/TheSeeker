@@ -82,5 +82,6 @@ namespace TheSeeker
         {
             searchCancellation.Cancel();
         }
+        
     }
 }

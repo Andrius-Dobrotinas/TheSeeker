@@ -10,8 +10,7 @@ namespace TheSeeker.Forms
     /// </summary>
     /// <typeparam name="TResult">Type of items returned by the search</typeparam>
     public abstract partial class SearchResultsForm<TResult> :
-        Form, ISearchResultsConsumerControl<TResult>/*ListBox>
-        where TSearchResultsDataSource : class, IBindingList, ICollection<TResult>*/
+        Form, ISearchResultsConsumerControl<TResult>
     {
         private BindingList<TResult> resultListCached;
 

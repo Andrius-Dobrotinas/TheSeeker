@@ -1,6 +1,6 @@
 ﻿namespace TheSeeker.Forms
 {
-    abstract partial class SearchResultsForm<TResult>//, TSearchResultsDataSource>
+    abstract partial class SearchResultsForm<TResult>
     {
         /// <summary>
         /// Required designer variable.
@@ -13,14 +13,16 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            Invoke(new System.Action(() =>
-            {
-                if (disposing && (components != null))
+            if (IsHandleCreated == true) { 
+                Invoke(new System.Action(() =>
                 {
-                    components.Dispose();
-                }
-                base.Dispose(disposing);
-            }));
+                    if (disposing && (components != null))
+                    {
+                        components.Dispose();
+                    }
+                    base.Dispose(disposing);
+                }));
+            }
         }
 
         #region Windows Form Designer generated code

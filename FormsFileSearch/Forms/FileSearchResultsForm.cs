@@ -14,8 +14,7 @@ namespace TheSeeker.Forms
     /// it use an interface and I don't really want to write my own FileInfo
     /// </summary>
     /// <typeparam name="TSearchResultsDataSource"></typeparam>
-    public class FileSearchResultsForm : SearchResultsForm<FileSystemInfo>
-        //where TSearchResultsDataSource : class, IBindingList, ICollection<FileSystemInfo>
+    public class FileSearchResultsForm<TResult> : SearchResultsForm<TResult> where TResult : FileSystemInfo
     {
         public FileSearchResultsForm()
         {
