@@ -83,6 +83,10 @@
       <Project>{9652f0b6-db64-43a2-9372-ce6b37127dbc}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Startup\Startup.csproj">
+      <Project>{7031cdb7-ca61-4894-8cc0-bd2789e7f677}</Project>
+      <Name>Startup</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
