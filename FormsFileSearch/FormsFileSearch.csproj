@@ -40,6 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\BindingList2.cs" />
+    <Compile Include="Interfaces\IDataConsumerControl.cs" />
+    <Compile Include="Interfaces\ISearchResultsConsumerControl.cs" />
+    <Compile Include="Interfaces\ISyncInvoke.cs" />
     <Compile Include="SearchManagerFactory.cs" />
     <Compile Include="FormsHelper.cs" />
     <Compile Include="Forms\FileSearchResultsForm.cs">

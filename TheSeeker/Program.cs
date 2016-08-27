@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Configuration;
-using System.Reflection;
 using System.Linq;
 using TheSeeker.Configuration;
-using System.Linq.Expressions;
+using TheSeeker.Startup;
 
 namespace TheSeeker.Forms
 {
@@ -29,7 +28,7 @@ namespace TheSeeker.Forms
                 var configCurrent = ((CurrentFormsSearchConfiguration)ConfigurationManager.GetSection(CurrentFormsSearchConfiguration.Name));
 
                 // Search Type
-                searchManager = Starter.GetTypes(configCurrent);
+                searchManager = Factory.CreateSearchManager(configCurrent);
             }
             catch (Exception e)
             {
@@ -40,7 +39,7 @@ namespace TheSeeker.Forms
             // Run Search Manager
             try
             {
-               // Application.Run(new SearchForm(searchManager));
+                Application.Run(new SearchForm(searchManager));
             }
             catch (Exception e)
             {

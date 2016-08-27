@@ -6,16 +6,16 @@ using System.Linq.Expressions;
 using System.Reflection;
 using TheSeeker.Configuration;
 
-namespace TheSeeker.Forms
+namespace TheSeeker.Startup
 {
-    public class Starter
+    public class Factory
     {
         /// <summary>
         /// Instantiates
         /// </summary>
         /// <param name="config">Configuration section for the desired search type</param>
         /// <returns></returns>
-        public static ISearchManager GetTypes(CurrentSearchConfiguration config)
+        public static ISearchManager CreateSearchManager(CurrentSearchConfiguration config)
         {
             if (string.IsNullOrEmpty(config.SearchType))
                 throw new ConfigurationErrorsException("\"SearchType\" cannot be empty");
@@ -54,17 +54,13 @@ namespace TheSeeker.Forms
         }
 
         /// <summary>
-        /// 
+        /// Creates an instance of the desired type checking if it implements the supplied interface
         /// </summary>
-        /// <typeparam name="TConfig"></typeparam>
-        /// <param name="config"></param>
-        /// <param name="typeNameProperty"></param>
-        /// <param name="requiredInterfaceType"></param>
-        /// <param name="genericTypeArguments"></param>
-        /// <param name="arguments"></param>
+        /// <typeparam name="TObject">Type of config object</typeparam>
+        /// <param name="config">An object that contains a property that contains the name of the type to instantiate</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException">In case</exception>
-        private static TypeInstance CreateTypeInstance<TConfig>(TConfig config, Expression<Func<TConfig, string>> typeNameProperty, Type requiredInterfaceType, Type[] genericTypeArguments, params object[] arguments)
+        /// <exception cref="ArgumentException"When there are problems instantiating the type</exception>
+        private static TypeInstance CreateTypeInstance<TObject>(TObject config, Expression<Func<TObject, string>> typeNameProperty, Type requiredInterfaceType, Type[] genericTypeArguments, params object[] arguments)
         {
             if (config == null)
                 throw new ArgumentOutOfRangeException(nameof(config));
@@ -78,7 +74,7 @@ namespace TheSeeker.Forms
                 string typeName = pinfo.GetValue(config) as string;
 
                 if (string.IsNullOrEmpty(typeName))
-                    throw new System.Configuration.ConfigurationErrorsException("No type name specified");
+                    throw new ConfigurationErrorsException("No type name specified");
             
                 return TypeInstantiator.CreateInstance(typeName, requiredInterfaceType, genericTypeArguments, arguments);
             }

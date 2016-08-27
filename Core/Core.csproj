@@ -42,11 +42,9 @@
     <Compile Include="Components\OperationIntervalClock.cs" />
     <Compile Include="Components\OperationTracker.cs" />
     <Compile Include="Interfaces\Common\IHaveDataSource.cs" />
-    <Compile Include="Interfaces\Forms\ISearchResultsConsumerControl.cs" />
-    <Compile Include="Interfaces\Forms\ISyncInvoke.cs" />
-    <Compile Include="Interfaces\Forms\IDataConsumerControl.cs" />
+    <Compile Include="Interfaces\Common\IHaveStatus.cs" />
     <Compile Include="Interfaces\ISearchFinishedHandler.cs" />
-    <Compile Include="Interfaces\Interfaces.cs" />
+    <Compile Include="Interfaces\Common\IAmReInitializable.cs" />
     <Compile Include="Interfaces\IOperationTracker.cs" />
     <Compile Include="Interfaces\ISearchAsync.cs" />
     <Compile Include="Interfaces\ISearchEngineWrapper.cs" />
@@ -56,9 +54,11 @@
     <Compile Include="Interfaces\ISearchManager.cs" />
     <Compile Include="Interfaces\ISearchResultsConsumer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DTOs\SearchComponents.cs" />
     <Compile Include="SearchEngineBase.cs" />
     <Compile Include="SearchEngineWrapper.cs" />
     <Compile Include="SearchManager.cs" />
+    <Compile Include="SearchManagerFactoryBase.cs" />
     <Compile Include="SearchResults.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

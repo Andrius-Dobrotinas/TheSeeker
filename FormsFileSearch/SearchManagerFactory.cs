@@ -4,9 +4,15 @@ using System.Linq;
 
 namespace TheSeeker.Forms
 {
-    public class SearchManagerFactory<TResult, TConsumer> : ISearchManagerFactory<TResult, TConsumer> where TConsumer : ISearchResultsConsumerControl<TResult>
-    {        
-        public ISearchManager Create(ISearchEngine<TResult> searchEngine, TConsumer searchResultsConsumer, IOperationTracker operationTracker)
+    /// <summary>
+    /// Builds a search manager that works with a Windows Forms-based Consumer
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <typeparam name="TConsumer"></typeparam>
+    public class SearchManagerFactory<TResult, TConsumer> : SearchManagerFactoryBase<TResult, TConsumer>
+        where TConsumer : ISearchResultsConsumerControl<TResult>
+    {
+        protected override SearchComponents<TResult> SetupComponents(ISearchEngine<TResult> searchEngine, TConsumer searchResultsConsumer, IOperationTracker operationTracker)
         {
             var resultsList = new BindingList2<TResult>(operationTracker, searchResultsConsumer);
             ISearchResults<TResult> searchResults = new SearchResults<TResult>(resultsList);
@@ -15,10 +21,9 @@ namespace TheSeeker.Forms
 
             searchEngine.ItemFoundHandler += (file) => searchResults.Add(file);
 
-            // Move this out??
             searchEngineWrapper.SearchStarted += () => {
                 searchResultsConsumer.ReInitialize();
-                //operationTracker.Start()?
+                //operationTracker.Start() //TODO?
                 searchResultsConsumer.Status = "Searching...";
             };
 
@@ -27,7 +32,11 @@ namespace TheSeeker.Forms
                 searchResultsConsumer.Status = $"Search finished ({timeElapsed})";
             };
 
-            return new SearchManager(searchEngineWrapper, searchResults);
+            return new SearchComponents<TResult>
+            {
+                SearchEngineWrapper = searchEngineWrapper,
+                SearchResults = searchResults
+            };
         }
     }
 }

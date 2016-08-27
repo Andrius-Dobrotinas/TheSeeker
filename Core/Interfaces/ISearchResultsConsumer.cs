@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace TheSeeker
 {
+    /// <summary>
+    /// Interface for types that consume/use search results
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
     public interface ISearchResultsConsumer<TResult>
     {
     }
