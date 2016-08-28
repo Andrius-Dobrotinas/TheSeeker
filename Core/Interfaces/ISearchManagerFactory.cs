@@ -13,6 +13,6 @@ namespace TheSeeker
         /// <summary>
         /// Implementations must create a Search Manager using the supplied components
         /// </summary>
-        ISearchManager Create(ISearchEngine<TResult> searchEngine, TConsumer searchResultsOutput, IOperationTracker operationTracker);
+        ISearchManager Create(ISearchEngine<TResult> searchEngine, TConsumer searchResultsConsumer, IOperationTracker operationTracker);
     }
 }

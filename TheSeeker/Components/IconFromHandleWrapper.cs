@@ -35,7 +35,7 @@ namespace TheSeeker.Forms
         extern static bool DestroyIcon(IntPtr handle);
 
         #region Disposing
-        public bool IsDisposed { get; private set; }
+        public bool IsDisposed { get; protected set; } = false;
 
         protected void Dispose(bool disposing)
         {

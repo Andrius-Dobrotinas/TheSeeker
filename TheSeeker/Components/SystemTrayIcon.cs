@@ -77,7 +77,9 @@ namespace TheSeeker.Forms
             {
                 if (disposing)
                 {
-                    Menu.Dispose();
+                    if (!Menu.IsDisposed)
+                        Menu.Dispose();
+
                     TrayIcon.Dispose();
                 }
 

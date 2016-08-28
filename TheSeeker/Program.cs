@@ -19,7 +19,7 @@ namespace TheSeeker.Forms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            ISearchManager searchManager;
+            StartupObjects objects;
 
             // Create a Search Manager sort of injecting desired types read from config
             try
@@ -27,8 +27,7 @@ namespace TheSeeker.Forms
                 // Read configuration and get Search Type
                 var configCurrent = ((CurrentFormsSearchConfiguration)ConfigurationManager.GetSection(CurrentFormsSearchConfiguration.Name));
 
-                // Search Type
-                searchManager = Factory.CreateSearchManager(configCurrent);
+                objects = Factory.CreateSearchManager(configCurrent);
             }
             catch (Exception e)
             {
@@ -39,7 +38,7 @@ namespace TheSeeker.Forms
             // Run Search Manager
             try
             {
-                using (var searchForm = new SearchForm(searchManager))
+                using (var searchForm = new SearchForm(objects.SearchManager))
                 using (var bitmapIcon = new IconFromHandleWrapper(Resources.TrayIcon))
                 using (ISystemTrayIcon trayIcon = new SystemTrayIcon()
                 {
@@ -56,6 +55,15 @@ namespace TheSeeker.Forms
             catch (Exception e)
             {
                 MessageBox.Show($"An error has occured:\n{e.Message}");
+            }
+            finally
+            {
+                // Dispose of the original input objects and the Search Manager
+                foreach (var item in objects.OriginalInputObjects)
+                {
+                    (item as IDisposable)?.Dispose();
+                }
+                objects.SearchManager.Dispose();
             }
         }
 

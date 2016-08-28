@@ -3,7 +3,10 @@ using System.Collections.Generic;
 
 namespace TheSeeker
 {
-    public interface ISearchManager : ISearchFinishedHandler
+    /// <summary>
+    /// Search managers are responsible for the disposal of objects supplied to them via constructor
+    /// </summary>
+    public interface ISearchManager : ISearchFinishedHandler, IDisposableOnce
     {
         /// <summary>
         /// Indicates whether a search is currently running

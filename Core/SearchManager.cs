@@ -39,7 +39,8 @@ namespace TheSeeker
         }
 
         /// <summary>
-        /// Initializes SearchManager with the supplied search engine and search results handler and adding all found items to it
+        /// Initializes Search Manager with the supplied search engine and search results handler
+        /// Disposes of these objects on Dispose
         /// </summary>
         /// <param name="searchResultsHandler"></param>
         public SearchManager(ISearchEngineWrapper searchEngine, ISearchResults searchResults)
@@ -82,5 +83,35 @@ namespace TheSeeker
         {
             searchCancellation.Cancel();
         }
+
+        #region IDisposable Support
+        public bool IsDisposed { get; protected set; } = false;
+
+        /// <summary>
+        /// In addition to internal matters, also disposes of items supplied via constructor
+        /// </summary>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                if (disposing)
+                {
+                    searchCancellation?.Dispose();
+                    (searchEngine as IDisposable)?.Dispose();
+                    (results as IDisposable)?.Dispose();
+                }
+
+                IsDisposed = true;
+            }
+        }
+
+        /// <summary>
+        /// In addition to internal matters, also disposes of items supplied via constructor
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 }
