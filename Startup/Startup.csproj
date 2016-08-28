@@ -42,6 +42,7 @@
     <Compile Include="Configuration\SearchTypeElementCollection.cs" />
     <Compile Include="Configuration\SearchTypesConfigurationSection.cs" />
     <Compile Include="DTOs\StartupObjects.cs" />
+    <Compile Include="Exceptions\TypeDoesNotImplementException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="DTOs\TypeInstance.cs" />
