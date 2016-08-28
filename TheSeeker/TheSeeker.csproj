@@ -49,7 +49,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\ISystemTrayIcon.cs" />
-    <Compile Include="Interfaces\IHidable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchFom.cs">
