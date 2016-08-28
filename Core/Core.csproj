@@ -41,6 +41,7 @@
     <Compile Include="Components\OperationCountTracker.cs" />
     <Compile Include="Components\OperationIntervalClock.cs" />
     <Compile Include="Components\OperationTracker.cs" />
+    <Compile Include="Interfaces\Common\IDisposableOnce.cs" />
     <Compile Include="Interfaces\Common\IHaveDataSource.cs" />
     <Compile Include="Interfaces\Common\IHaveStatus.cs" />
     <Compile Include="Interfaces\ISearchFinishedHandler.cs" />

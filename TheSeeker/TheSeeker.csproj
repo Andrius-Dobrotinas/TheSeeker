@@ -42,6 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\CurrentFormsSearchConfiguration.cs" />
+    <Compile Include="Components\IconFromHandleWrapper.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\ISystemTrayIcon.cs" />
+    <Compile Include="Interfaces\IHidable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchFom.cs">
@@ -50,6 +58,7 @@
     <Compile Include="SearchFom.Designer.cs">
       <DependentUpon>SearchFom.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\SystemTrayIcon.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -60,6 +69,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="SearchFom.resx">
       <DependentUpon>SearchFom.cs</DependentUpon>
     </EmbeddedResource>
@@ -87,6 +100,9 @@
       <Project>{7031cdb7-ca61-4894-8cc0-bd2789e7f677}</Project>
       <Name>Startup</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TrayIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

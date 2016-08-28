@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace TheSeeker.Forms
 {
-    public partial class SearchForm : Form
+    public partial class SearchForm : Form, IHidable
     {
         private ISearchManager searchManager;
 
