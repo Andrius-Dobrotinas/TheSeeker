@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace TheSeeker
 {
-    
-
     public interface IAmReInitializable
     {
         /// <summary>
-        /// Initializes or reinitializes the object and the Data Source for a new search
+        /// Initializes or reinitializes the object instead of creating a new instance
         /// </summary>
         void ReInitialize();
     }

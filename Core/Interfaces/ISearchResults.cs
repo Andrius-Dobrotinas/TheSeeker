@@ -18,14 +18,10 @@ namespace TheSeeker
 
     /// <summary>
     /// Common interface for all search results classes with methods that initialize them before search
+    /// Implementing classes must use ReInitialize to get ready for handling search results so that new objects of this type don't need to be created for each search
     /// </summary>
-    public interface ISearchResults
+    public interface ISearchResults : IAmReInitializable
     {
-        /// <summary>
-        /// Implementing classes use this to get ready for handling search results so that new objects of this type don't need to be created for each search
-        /// </summary>
-        void ReInitialize();
-
         /// <summary>
         /// Occurs right before actual ReInitialization of this object occurs
         /// </summary>

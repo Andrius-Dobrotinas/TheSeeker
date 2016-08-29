@@ -64,6 +64,11 @@ namespace TheSeeker.Forms
         /// <param name="action"></param>
         protected void UpdateUi(Action action)
         {
+            /* TODO: when closing the form with search still in progress, it tries to update the form after
+            having disposed of the form. IsDisposed doesn't help without locking, and locking would be bad
+            for performance here. So I need to find a way to cancel the search from here. Whenever I have
+            some spare time*/
+
             if (IsHandleCreated)
             {
                 Invoke(action);
