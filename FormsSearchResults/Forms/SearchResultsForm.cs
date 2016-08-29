@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
+using TheSeeker.Forms.Properties;
 
 namespace TheSeeker.Forms
 {
@@ -16,17 +18,19 @@ namespace TheSeeker.Forms
 
         protected BindingList<TResult> Results => resultListCached;
 
-        public ListBox ResultsOutput => list;
+        public ListBox ResultList => list;
+
+        protected ContextMenuStrip ListContextMenu => listContextMenu;
 
         public event EventHandler DataSourceChanged
         {
             add
             {
-                ResultsOutput.DataSourceChanged += value;
+                ResultList.DataSourceChanged += value;
             }
             remove
             {
-                ResultsOutput.DataSourceChanged -= value;
+                ResultList.DataSourceChanged -= value;
             }
         }
 
@@ -38,8 +42,11 @@ namespace TheSeeker.Forms
         {
             InitializeComponent();
 
+            // Get window position from settings
+            this.DesktopLocation = (Point)Settings.Default["WindowLocation"];
+
             // Cache data source (result list)
-            list.DataSourceChanged += (source, e) =>
+            ResultList.DataSourceChanged += (source, e) =>
             {
                 resultListCached = list.DataSource as BindingList<TResult>;
 
@@ -82,12 +89,12 @@ namespace TheSeeker.Forms
         {
             get
             {
-                return (IList<TResult>)list.DataSource;
+                return (IList<TResult>)ResultList.DataSource;
             }
 
             set
             {
-                list.DataSource = value;
+                ResultList.DataSource = value;
             }
         }
 
@@ -102,12 +109,43 @@ namespace TheSeeker.Forms
             }
         }
         
-        protected abstract void list_MouseDown(object sender, MouseEventArgs e);
+        protected virtual void ResultList_MouseDown(object sender, MouseEventArgs e)
+        {
+            // Select row on right mouse click
+            if (e.Button == MouseButtons.Right)
+            {
+                var index = ResultList.IndexFromPoint(e.Location);
+                if (index != ListBox.NoMatches)
+                {
+                    ResultList.SelectedIndex = index;
+                }
+            }
+        }
 
-        protected abstract void listContextMenu_Opening(object sender, CancelEventArgs e);
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            // Save window position
+            Settings.Default["WindowLocation"] = this.DesktopLocation;
+            Settings.Default.Save();
 
-        protected abstract void listContextMenu_OpenLocation_Click(object sender, EventArgs e);
+            base.OnClosing(e);
+        }
 
-        protected abstract void list_DoubleClick(object sender, EventArgs e);
+        /// <summary>
+        /// Casts selected item to TResult and uses it when invoking the supplied action
+        /// </summary>
+        /// <param name="action">That uses selected item</param>
+        protected void ActOnSingleSelectedItem(Action<TResult> action)
+        {
+            var file = (TResult)ResultList.Items[ResultList.SelectedIndex - 1];
+            action(file);
+        }
+
+        /// <summary>
+        /// Gets invoked on double-click event occurs on the main Result list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected abstract void ResultList_DoubleClick(object sender, EventArgs e);
     }
 }

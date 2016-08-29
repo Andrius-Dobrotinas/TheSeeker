@@ -19,6 +19,11 @@ namespace TheSeeker.Forms
             this.searchManager.SearchFinished += (source, timeElapsed) => Invoke(new Action(() => Cancel.Enabled = false));
         }
 
+        public SearchForm(ISearchManager searchManager, Point windowLocation) : this(searchManager)
+        {
+            this.DesktopLocation = windowLocation;
+        }
+
         private void SearchForm_Load(object sender, EventArgs e)
         {
 

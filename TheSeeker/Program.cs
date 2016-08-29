@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using TheSeeker.Configuration;
 using TheSeeker.Startup;
+using TheSeeker.Forms.Properties;
 
 namespace TheSeeker.Forms
 {
@@ -20,12 +21,13 @@ namespace TheSeeker.Forms
             Application.SetCompatibleTextRenderingDefault(false);
 
             StartupObjects objects;
+            CurrentFormsSearchConfiguration configCurrent;
 
             // Create a Search Manager sort of injecting desired types read from config
             try
             {
                 // Read configuration and get Search Type
-                var configCurrent = ((CurrentFormsSearchConfiguration)ConfigurationManager.GetSection(CurrentFormsSearchConfiguration.Name));
+                configCurrent = ((CurrentFormsSearchConfiguration)ConfigurationManager.GetSection(CurrentFormsSearchConfiguration.Name));
 
                 objects = Factory.CreateSearchManager(configCurrent);
             }
@@ -38,7 +40,10 @@ namespace TheSeeker.Forms
             // Run Search Manager
             try
             {
-                using (var searchForm = new SearchForm(objects.SearchManager))
+                // Get window position from settings
+                var windowLocation = (System.Drawing.Point)Settings.Default["WindowLocation"];
+
+                using (var searchForm = new SearchForm(objects.SearchManager, windowLocation))
                 using (var bitmapIcon = new IconFromHandleWrapper(Resources.TrayIcon))
                 using (ISystemTrayIcon trayIcon = new SystemTrayIcon()
                 {
@@ -49,7 +54,12 @@ namespace TheSeeker.Forms
                     CreateTrayIconMenuItems(trayIcon, searchForm);
 
                     searchForm.HandleCreated += (sender, e) => trayIcon.Visible = true;
+
                     Application.Run(searchForm);
+
+                    // Save window position
+                    Settings.Default["WindowLocation"] = searchForm.DesktopLocation;
+                    Settings.Default.Save();
                 }
             }
             catch (Exception e)
