@@ -8,16 +8,16 @@ namespace TheSeeker
     /// A wrapper class that gives search manager access to ICollection classes
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
-    public class SearchResults<TResult> : ISearchResults<TResult>
+    public class SearchResultsConsumer<TResult> : ISearchResultsConsumer<TResult>
     {
-        private ICollection<TResult> resultsCollection;
-
-        public SearchResults(ICollection<TResult> resultsCollection)
-        {
-            this.resultsCollection = resultsCollection;
-        }
+        public ICollection<TResult> ResultsCollection { get; private set; }
 
         public event Action BeforeReInitialization;
+
+        public SearchResultsConsumer(ICollection<TResult> resultsCollection)
+        {
+            ResultsCollection = resultsCollection;
+        }
 
         /// <summary>
         /// Updates the list with a new item on the thread that owns the form's handle
@@ -25,16 +25,22 @@ namespace TheSeeker
         /// <param name="item"></param>
         public void Add(TResult item)
         {
-            resultsCollection.Add(item);
+            ResultsCollection.Add(item);
         }
 
         /// <summary>
-        /// Shows results window
+        /// Initializes the object for a new search
         /// </summary>
         public void ReInitialize()
         {
             BeforeReInitialization?.Invoke();
-            resultsCollection.Clear();
+            ResultsCollection.Clear();
+            OnReInitialization();
+        }
+
+        protected virtual void OnReInitialization()
+        {
+            
         }
     }
 }

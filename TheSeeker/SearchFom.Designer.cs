@@ -73,7 +73,6 @@
             this.Name = "SearchForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "SearchForm";
-            this.Load += new System.EventHandler(this.SearchForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -7,8 +7,8 @@
     <ProjectGuid>{7031CDB7-CA61-4894-8CC0-BD2789E7F677}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TheSeeker.Startup</RootNamespace>
-    <AssemblyName>Startup</AssemblyName>
+    <RootNamespace>TheSeeker.Initialization</RootNamespace>
+    <AssemblyName>SearchManagerFactory</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -41,10 +41,9 @@
     <Compile Include="Configuration\SearchTypeElement.cs" />
     <Compile Include="Configuration\SearchTypeElementCollection.cs" />
     <Compile Include="Configuration\SearchTypesConfigurationSection.cs" />
-    <Compile Include="DTOs\StartupObjects.cs" />
     <Compile Include="Exceptions\TypeDoesNotImplementException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Factory.cs" />
+    <Compile Include="SearchManagerFactory.cs" />
     <Compile Include="DTOs\TypeInstance.cs" />
     <Compile Include="TypeInstantiator.cs" />
   </ItemGroup>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheSeeker.Startup
+namespace TheSeeker.Initialization
 {
     /// <summary>
     /// An exception that indicates that the type does not implement the target type

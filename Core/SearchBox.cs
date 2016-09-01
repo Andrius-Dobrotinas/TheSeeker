@@ -10,10 +10,10 @@ namespace TheSeeker
     /// <summary>
     /// Manages searches and handles the results using the supplied search results handler
     /// </summary>
-    public class SearchManager : ISearchManager
+    public class SearchBox<TResult> : ISearchBox
     {
-        private ISearchEngineWrapper searchEngine;
-        private ISearchResults results;
+        private ISearchEngineWrapper<TResult> searchEngine;
+        private ISearchResultsConsumer<TResult> results;
 
         private Task searchTask;
         private CancellationTokenSource searchCancellation;
@@ -39,14 +39,20 @@ namespace TheSeeker
         }
 
         /// <summary>
+        /// Occurs immediately after a request to stop current search when calling non-waiting Stop method
+        /// </summary>
+        public event EventHandler SearchStopped;
+
+        /// <summary>
         /// Initializes Search Manager with the supplied search engine and search results handler
         /// Disposes of these objects on Dispose
         /// </summary>
         /// <param name="searchResultsHandler"></param>
-        public SearchManager(ISearchEngineWrapper searchEngine, ISearchResults searchResults)
+        public SearchBox(ISearchEngineWrapper<TResult> searchEngine, ISearchResultsConsumer<TResult> searchResults)
         {
             this.searchEngine = searchEngine;
             results = searchResults;
+            searchEngine.ItemFoundHandler += (item) => results.Add(item);
         }
 
         /// <summary>
@@ -77,37 +83,47 @@ namespace TheSeeker
         }
 
         /// <summary>
-        /// Stops the current search
+        /// Cancels current search
         /// </summary>
         public void Stop()
         {
-            searchCancellation.Cancel();
+            Stop(false);
+        }
+
+        /// <summary>
+        /// Cancels current search and blocks until it actually stops
+        /// </summary>
+        public void StopAndWait()
+        {
+            Stop(true);
+        }
+
+        protected void Stop(bool wait)
+        {
+            searchCancellation?.Cancel();
+            if (wait)
+                searchTask?.Wait();
+            else
+                SearchStopped?.Invoke(this, EventArgs.Empty);
         }
 
         #region IDisposable Support
         public bool IsDisposed { get; protected set; } = false;
 
-        /// <summary>
-        /// In addition to internal matters, also disposes of items supplied via constructor
-        /// </summary>
         protected virtual void Dispose(bool disposing)
         {
             if (!IsDisposed)
             {
                 if (disposing)
                 {
+                    Stop(true);
                     searchCancellation?.Dispose();
-                    (searchEngine as IDisposable)?.Dispose();
-                    (results as IDisposable)?.Dispose();
                 }
 
                 IsDisposed = true;
             }
         }
 
-        /// <summary>
-        /// In addition to internal matters, also disposes of items supplied via constructor
-        /// </summary>
         public void Dispose()
         {
             Dispose(true);

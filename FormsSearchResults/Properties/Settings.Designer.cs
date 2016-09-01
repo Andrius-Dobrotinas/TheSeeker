@@ -25,13 +25,37 @@ namespace TheSeeker.Forms.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1, -1")]
-        public global::System.Drawing.Point WindowLocation {
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point ResultsFormLocation {
             get {
-                return ((global::System.Drawing.Point)(this["WindowLocation"]));
+                return ((global::System.Drawing.Point)(this["ResultsFormLocation"]));
             }
             set {
-                this["WindowLocation"] = value;
+                this["ResultsFormLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("604")]
+        public int ResultsFormWidth {
+            get {
+                return ((int)(this["ResultsFormWidth"]));
+            }
+            set {
+                this["ResultsFormWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("412")]
+        public int ResultsFormHeight {
+            get {
+                return ((int)(this["ResultsFormHeight"]));
+            }
+            set {
+                this["ResultsFormHeight"] = value;
             }
         }
     }

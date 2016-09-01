@@ -4,26 +4,21 @@ using System.Collections.Generic;
 namespace TheSeeker
 {
     /// <summary>
-    /// Search managers are responsible for the disposal of objects supplied to them via constructor
+    /// Interface for factories for creating search managers 
     /// </summary>
-    public interface ISearchManager : ISearchFinishedHandler, IDisposableOnce
+    /// <typeparam name="TResult"></typeparam>
+    public interface ISearchManager<TResult> : ISearchManager
     {
         /// <summary>
-        /// Indicates whether a search is currently running
+        /// Implementations must create a Search Manager using the supplied components
         /// </summary>
-        bool IsSearching { get; }
+        void Create(ISearchEngineWrapper<TResult> searchEngineWrapper, IOperationTracker operationTracker);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="searchLocation"></param>
-        /// <param name="searchPattern"></param>
-        /// <returns>true if new search started, false if there was an active search running</returns>
-        bool Search(string searchLocation, string searchPattern);
-
-        /// <summary>
-        /// Stops the current search
-        /// </summary>
-        void Stop();
+    public interface ISearchManager : IDisposableOnce
+    {
+        ISearchEngineWrapper SearchEngineWrapper { get; }
+        IOperationTracker OperationTracker { get; }
+        ISearchBox SearchBox { get; }
     }
 }

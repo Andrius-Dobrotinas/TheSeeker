@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Linq;
 using TheSeeker.Configuration;
-using TheSeeker.Startup;
 using TheSeeker.Forms.Properties;
 
 namespace TheSeeker.Forms
@@ -20,8 +19,8 @@ namespace TheSeeker.Forms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            StartupObjects objects;
             CurrentFormsSearchConfiguration configCurrent;
+            ISearchManager searchManager;
 
             // Create a Search Manager sort of injecting desired types read from config
             try
@@ -29,7 +28,7 @@ namespace TheSeeker.Forms
                 // Read configuration and get Search Type
                 configCurrent = ((CurrentFormsSearchConfiguration)ConfigurationManager.GetSection(CurrentFormsSearchConfiguration.Name));
 
-                objects = Factory.CreateSearchManager(configCurrent);
+                searchManager = Initialization.SearchManagerFactory.CreateNew(configCurrent);
             }
             catch (Exception e)
             {
@@ -40,10 +39,16 @@ namespace TheSeeker.Forms
             // Run Search Manager
             try
             {
-                // Get window position from settings
-                var windowLocation = (System.Drawing.Point)Settings.Default["WindowLocation"];
+                InitiateSearchDelegate initSearch = (searchLocation, searchPattern) =>
+                {
+                    if (!searchManager.SearchBox.IsSearching)
+                    {
+                        return searchManager.SearchBox.Search(searchLocation, searchPattern);
+                    }
+                    return false;
+                };
 
-                using (var searchForm = new SearchForm(objects.SearchManager, windowLocation))
+                using (var searchForm = new SearchForm(initSearch))
                 using (var bitmapIcon = new IconFromHandleWrapper(Resources.TrayIcon))
                 using (ISystemTrayIcon trayIcon = new SystemTrayIcon()
                 {
@@ -54,12 +59,19 @@ namespace TheSeeker.Forms
                     CreateTrayIconMenuItems(trayIcon, searchForm);
 
                     searchForm.HandleCreated += (sender, e) => trayIcon.Visible = true;
+                    searchForm.CancelSearch += (sender, e) =>
+                    {
+                        searchManager.SearchBox.Stop();
+                    };
+                    searchManager.SearchBox.SearchStopped += (sender, e) => searchForm.SearchStopped();
+
+                    // On exit, cancel and wait for search to completely stop to allow for proper disposal of objects
+                    searchForm.FormClosed += (sender, e) =>
+                    {
+                        searchManager.SearchBox.StopAndWait();
+                    };
 
                     Application.Run(searchForm);
-
-                    // Save window position
-                    Settings.Default["WindowLocation"] = searchForm.DesktopLocation;
-                    Settings.Default.Save();
                 }
             }
             catch (Exception e)
@@ -68,12 +80,7 @@ namespace TheSeeker.Forms
             }
             finally
             {
-                // Dispose of the original input objects and the Search Manager
-                foreach (var item in objects.OriginalInputObjects)
-                {
-                    (item as IDisposable)?.Dispose();
-                }
-                objects.SearchManager.Dispose();
+                searchManager.Dispose();
             }
         }
 
@@ -92,6 +99,12 @@ namespace TheSeeker.Forms
             trayIcon.Menu.Opening += (sender, e) => showMenuItem.Text = form.Visible ? "Hide" : "Show";
 
             trayIcon.AddMenuItem("Exit", (sender, e) => Application.Exit());
+
+            // TODO: add some more menu items
+            /*var cancelMenuItem = trayIcon.AddMenuItem("Cancel", (sender, e) => form.CancelButton.PerformClick());
+            
+
+            trayIcon.AddMenuItem("Show", (sender, e) => Application.Exit());*/
         }
     }
 }

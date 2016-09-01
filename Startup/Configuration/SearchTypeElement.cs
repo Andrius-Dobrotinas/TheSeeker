@@ -47,12 +47,12 @@ namespace TheSeeker.Configuration
         /// <summary>
         /// Type of factory that creates a Search Manager with injected Search Engine, Consumer and Operation Tracker
         /// </summary>
-        [ConfigurationProperty("searchManagerFactoryType", IsRequired = true)]
-        public string SearchManagerFactoryType
+        [ConfigurationProperty("searchManagerType", IsRequired = true)]
+        public string SearchManagerType
         {
             get
             {
-                return (string)this["searchManagerFactoryType"];
+                return (string)this["searchManagerType"];
             }
         }
     }

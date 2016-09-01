@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TheSeeker.Forms
 {
-    public interface ISearchResultsConsumerControl<TResult> : ISearchResultsConsumer<TResult>,
+    public interface ISearchResultsConsumerControl<TResult> : 
         IDataConsumerControl<TResult>,
         IHaveStatus,
         IAmReInitializable,

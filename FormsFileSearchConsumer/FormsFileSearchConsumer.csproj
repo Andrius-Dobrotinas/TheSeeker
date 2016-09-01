@@ -37,6 +37,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileSearchManager.cs" />
     <Compile Include="ShellHelper.cs" />
     <Compile Include="Forms\FileSearchResultsForm.cs">
       <SubType>Form</SubType>
@@ -51,6 +52,10 @@
     <ProjectReference Include="..\FormsSearchResults\FormsSearchResults.csproj">
       <Project>{35e7eee3-d9a6-44c7-b9da-42195e163ae6}</Project>
       <Name>FormsSearchResults</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Startup\SearchManagerFactory.csproj">
+      <Project>{7031cdb7-ca61-4894-8cc0-bd2789e7f677}</Project>
+      <Name>SearchManagerFactory</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

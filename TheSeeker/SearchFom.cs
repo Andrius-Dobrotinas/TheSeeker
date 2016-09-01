@@ -1,37 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using TheSeeker.Forms.Properties;
 
 namespace TheSeeker.Forms
 {
+    /// <summary>
+    /// Delegate type that is intended for initiating a new search. Returns a value indicating whether a new search has been started
+    /// </summary>
+    /// <param name="searchLocation"></param>
+    /// <param name="searchPattern"></param>
+    /// <returns></returns>
+    public delegate bool InitiateSearchDelegate(string searchLocation, string searchPattern);
+
     public partial class SearchForm : Form
     {
-        private ISearchManager searchManager;
+        private InitiateSearchDelegate initiateSearchDelegate;
 
-        public SearchForm(ISearchManager searchManager)
+        /// <summary>
+        /// Occurs when the form cancels current search
+        /// </summary>
+        public event EventHandler CancelSearch;
+
+        /// <summary>
+        /// Occurs when the form cancels current search and wants to block until search stops
+        /// </summary>
+        public event EventHandler CancelSearchAndBlock;
+
+        public SearchForm()
         {
             InitializeComponent();
-
-            this.searchManager = searchManager;
-
-            this.searchManager.SearchFinished += (source, timeElapsed) => Invoke(new Action(() => Cancel.Enabled = false));
         }
 
-        public SearchForm(ISearchManager searchManager, Point windowLocation) : this(searchManager)
+        /// <summary>
+        /// Search form
+        /// </summary>
+        /// <param name="initSearchDelegate">Delegate that will be run each time search is initialized from within this form</param>
+        /// <param name="settings">Application settings for this window</param>
+        public SearchForm(InitiateSearchDelegate initSearchDelegate) : this()
         {
-            this.DesktopLocation = windowLocation;
-        }
-
-        private void SearchForm_Load(object sender, EventArgs e)
-        {
-
+            initiateSearchDelegate = initSearchDelegate;
+            DesktopLocation = Settings.Default.WindowLocation;
+            LocationChanged += (sender, e) =>
+            {
+                // Save window position
+                Settings.Default.WindowLocation = DesktopLocation;
+                Settings.Default.Save();
+            };
         }
 
         private void Cancel_Click(object sender, EventArgs e)
         {
-            searchManager.Stop();
+            CancelSearch?.Invoke(sender, EventArgs.Empty);
+            Cancel.Enabled = false;
         }
 
         private void SearchPattern_KeyPress(object sender, KeyPressEventArgs e)
@@ -44,11 +68,15 @@ namespace TheSeeker.Forms
 
         private void CallSearch()
         {
-            if (!searchManager.IsSearching)
-            {
-                searchManager.Search(SearchLocation.Text, SearchPattern.Text);
-                Cancel.Enabled = true;
-            }
+            Cancel.Enabled = initiateSearchDelegate?.Invoke(SearchLocation.Text, SearchPattern.Text) == true;
+        }
+
+        /// <summary>
+        /// Method must be run when search is stops/finishes
+        /// </summary>
+        public void SearchStopped()
+        {
+            Cancel.Enabled = false;
         }
     }
 }

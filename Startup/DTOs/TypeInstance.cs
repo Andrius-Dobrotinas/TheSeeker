@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheSeeker.Startup
+namespace TheSeeker.Initialization
 {
     public struct TypeInstance
     {

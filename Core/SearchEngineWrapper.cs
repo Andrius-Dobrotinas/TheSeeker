@@ -17,6 +17,29 @@ namespace TheSeeker
         public ISearchEngine<TResult> SearchEngine { get; }
         public virtual event EventHandler<TimeSpan> SearchFinished;
         public virtual event Action SearchStarted;
+        public event ResultHandler<TResult> ItemFoundHandler
+        {
+            add
+            {
+                SearchEngine.ItemFoundHandler += value;
+            }
+            remove
+            {
+                SearchEngine.ItemFoundHandler -= value;
+            }
+        }
+        public event EventHandler<Exception> SearchExceptionHandler
+        {
+            add
+            {
+                SearchEngine.SearchExceptionHandler += value;
+            }
+            remove
+            {
+                SearchEngine.SearchExceptionHandler -= value;
+            }
+        }
+
         public TimeSpan TimeElapsed => watch.Elapsed;
 
         public SearchEngineWrapper()

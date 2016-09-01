@@ -95,9 +95,9 @@
       <Project>{9652f0b6-db64-43a2-9372-ce6b37127dbc}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Startup\Startup.csproj">
+    <ProjectReference Include="..\Startup\SearchManagerFactory.csproj">
       <Project>{7031cdb7-ca61-4894-8cc0-bd2789e7f677}</Project>
-      <Name>Startup</Name>
+      <Name>SearchManagerFactory</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

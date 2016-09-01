@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 using TheSeeker.Forms.Properties;
 
@@ -22,6 +21,8 @@ namespace TheSeeker.Forms
 
         protected ContextMenuStrip ListContextMenu => listContextMenu;
 
+        public event EventHandler FormHide;
+
         public event EventHandler DataSourceChanged
         {
             add
@@ -41,9 +42,7 @@ namespace TheSeeker.Forms
         public SearchResultsForm()
         {
             InitializeComponent();
-
-            // Get window position from settings
-            this.DesktopLocation = (Point)Settings.Default["WindowLocation"];
+            SetWindowPropertiesFromSettings();
 
             // Cache data source (result list)
             ResultList.DataSourceChanged += (source, e) =>
@@ -56,6 +55,26 @@ namespace TheSeeker.Forms
                     UpdateUi(() => lblResultsCount.Text = (resultListCached as ICollection<TResult>).Count.ToString());
                 };
             };
+
+            // Save window properties to settings
+            LocationChanged += (sender, e) =>
+            {
+                Settings.Default.ResultsFormLocation = DesktopLocation;
+                Settings.Default.Save();
+            };
+            ResizeEnd += (sender, e) =>
+            {
+                Settings.Default.ResultsFormWidth = Width;
+                Settings.Default.ResultsFormHeight = Height;
+                Settings.Default.Save();
+            };
+        }
+
+        protected void SetWindowPropertiesFromSettings()
+        {
+            DesktopLocation = Settings.Default.ResultsFormLocation;
+            Width = Settings.Default.ResultsFormWidth;
+            Height = Settings.Default.ResultsFormHeight;
         }
 
         /// <summary>
@@ -64,11 +83,6 @@ namespace TheSeeker.Forms
         /// <param name="action"></param>
         protected void UpdateUi(Action action)
         {
-            /* TODO: when closing the form with search still in progress, it tries to update the form after
-            having disposed of the form. IsDisposed doesn't help without locking, and locking would be bad
-            for performance here. So I need to find a way to cancel the search from here. Whenever I have
-            some spare time*/
-
             if (IsHandleCreated)
             {
                 Invoke(action);
@@ -109,11 +123,26 @@ namespace TheSeeker.Forms
         public virtual void ReInitialize()
         {
             if (!IsHandleCreated)
-            {
                 FormsHelper.RunOnNewThread(this, true);
-            }
+            else
+                UpdateUi(() => Show());
         }
-        
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (!(e.CloseReason == CloseReason.ApplicationExitCall &&
+                e.CloseReason == CloseReason.TaskManagerClosing &&
+                e.CloseReason == CloseReason.WindowsShutDown))
+            {
+                FormHide?.Invoke(this, EventArgs.Empty);
+                e.Cancel = true;
+
+                Hide();
+            }
+
+            base.OnFormClosing(e);
+        }
+
         protected virtual void ResultList_MouseDown(object sender, MouseEventArgs e)
         {
             // Select row on right mouse click
@@ -125,15 +154,6 @@ namespace TheSeeker.Forms
                     ResultList.SelectedIndex = index;
                 }
             }
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            // Save window position
-            Settings.Default["WindowLocation"] = this.DesktopLocation;
-            Settings.Default.Save();
-
-            base.OnClosing(e);
         }
 
         /// <summary>

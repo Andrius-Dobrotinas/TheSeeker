@@ -6,12 +6,12 @@ using System.Linq.Expressions;
 using System.Reflection;
 using TheSeeker.Configuration;
 
-namespace TheSeeker.Startup
+namespace TheSeeker.Initialization
 {
     /// <summary>
     /// Class for dynamic instantiation of Search Manager on application startup
     /// </summary>
-    public static class Factory
+    public static class SearchManagerFactory
     {
         /// <summary>
         /// Instantiates search components from the supplied config and builds a search manager.
@@ -19,7 +19,7 @@ namespace TheSeeker.Startup
         /// </summary>
         /// <param name="config">Configuration section for the desired search type</param>
         /// <returns></returns>
-        public static StartupObjects CreateSearchManager(CurrentSearchConfiguration config)
+        public static ISearchManager CreateNew(CurrentSearchConfiguration config)
         {
             if (string.IsNullOrEmpty(config.SearchType))
                 throw new ConfigurationErrorsException("\"SearchType\" cannot be empty");
@@ -31,49 +31,48 @@ namespace TheSeeker.Startup
             // Get types and create instances
             TypeInstance searchEngine = default(TypeInstance);
             TypeInstance operationTracker = default(TypeInstance);
-            TypeInstance searchResultsConsumer = default(TypeInstance);
-            TypeInstance searchFactory = default(TypeInstance);
+            TypeInstance searchEngineWrapper = default(TypeInstance);
             ISearchManager searchManager = null;
 
             try
             {
-            // Search Engine
+                // Search Engine
                 Type iSearchEngineGenericType = typeof(ISearchEngine<>).MakeGenericType(searchType);
                 searchEngine = CreateTypeInstance(searchTypeConfig, c => c.SearchEngineType, iSearchEngineGenericType, null, null);
+
+                // Search Engine Wrapper
+                searchEngineWrapper = new TypeInstance
+                {
+                    Type = typeof(SearchEngineWrapper<>).MakeGenericType(searchType)
+                };
+                searchEngineWrapper.Instance = Activator.CreateInstance(searchEngineWrapper.Type, searchEngine.Instance);
 
                 // Operation Tracker
                 operationTracker = CreateTypeInstance(config, c => c.OperationTrackerType, typeof(IOperationTracker), null, config.ListRefreshInterval);
 
-                // Search Results Consumer
-                Type iSearchResultsConsumerGenericType = typeof(ISearchResultsConsumer<>).MakeGenericType(searchType);
-                searchResultsConsumer = CreateTypeInstance(searchTypeConfig, c => c.SearchResultsConsumerType, iSearchResultsConsumerGenericType, new Type[] { searchType });
-
                 // Search Manager Factory
-                Type iSearchFactoryGenericType = typeof(ISearchManagerFactory<,>).MakeGenericType(searchType, searchResultsConsumer.Type);
-                Type[] genericTypeArgs = new[] { searchType, searchResultsConsumer.Type };
-                searchFactory = CreateTypeInstance(searchTypeConfig, c => c.SearchManagerFactoryType, iSearchFactoryGenericType, genericTypeArgs);
+                Type iSearchManagerGenericType = typeof(ISearchManager<>).MakeGenericType(searchType);
+                Type[] genericTypeArgs = new[] { searchType };
+                searchManager = (ISearchManager)CreateTypeInstance(searchTypeConfig, c => c.SearchManagerType, iSearchManagerGenericType, genericTypeArgs).Instance;
 
                 // Get Create method
-                Type[] argumentTypes = new[] { searchEngine.Type, searchResultsConsumer.Type, operationTracker.Type };
-                MethodInfo method = iSearchFactoryGenericType.GetMethod("Create", argumentTypes);
+                Type[] argumentTypes = new[] { searchEngineWrapper.Type, operationTracker.Type };
+                MethodInfo method = iSearchManagerGenericType.GetMethod("Create", argumentTypes);
 
-                // Create Search Manager
-                object[] arguments = new[] { searchEngine.Instance, searchResultsConsumer.Instance, operationTracker.Instance };
-                searchManager = (ISearchManager)method.Invoke(searchFactory.Instance, arguments);
+                // Create Search results consumer
+                object[] arguments = new[] { searchEngineWrapper.Instance, operationTracker.Instance };
+                method.Invoke(searchManager, arguments);
 
-                return new StartupObjects
-                {
-                    SearchManager = searchManager,
-                    OriginalInputObjects = arguments
-                };
+                return searchManager;
             }
-            finally
+            catch
             {
                 (searchEngine.Instance as IDisposable)?.Dispose();
                 (operationTracker.Instance as IDisposable)?.Dispose();
-                (searchResultsConsumer.Instance as IDisposable)?.Dispose();
-                (searchFactory.Instance as IDisposable)?.Dispose();
+                (searchEngineWrapper.Instance as IDisposable)?.Dispose();
                 (searchManager as IDisposable)?.Dispose();
+
+                throw;
             }
         }
 

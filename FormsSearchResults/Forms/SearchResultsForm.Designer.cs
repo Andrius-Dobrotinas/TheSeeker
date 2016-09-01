@@ -76,6 +76,7 @@
             this.lblCurrentLocation.Size = new System.Drawing.Size(21, 13);
             this.lblCurrentLocation.TabIndex = 1;
             this.lblCurrentLocation.Text = "c:\\";
+            this.lblCurrentLocation.Visible = false;
             // 
             // lblResultsCount
             // 

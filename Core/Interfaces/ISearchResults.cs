@@ -7,7 +7,7 @@ namespace TheSeeker
     /// Interface for typed search results classes that can add found items to the underlying results collection
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
-    public interface ISearchResults<TResult> : ISearchResults
+    public interface ISearchResultsConsumer<TResult> : ISearchResultsConsumer
     {
         /// <summary>
         /// Adds an item to the underlying results collection
@@ -20,8 +20,10 @@ namespace TheSeeker
     /// Common interface for all search results classes with methods that initialize them before search
     /// Implementing classes must use ReInitialize to get ready for handling search results so that new objects of this type don't need to be created for each search
     /// </summary>
-    public interface ISearchResults : IAmReInitializable
+    public interface ISearchResultsConsumer
     {
+        void ReInitialize();
+
         /// <summary>
         /// Occurs right before actual ReInitialization of this object occurs
         /// </summary>

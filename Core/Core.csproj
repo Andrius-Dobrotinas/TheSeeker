@@ -51,16 +51,14 @@
     <Compile Include="Interfaces\ISearchEngineWrapper.cs" />
     <Compile Include="Interfaces\ISearchEngine.cs" />
     <Compile Include="Interfaces\ISearchResults.cs" />
-    <Compile Include="Interfaces\ISearchManagerFactory.cs" />
     <Compile Include="Interfaces\ISearchManager.cs" />
-    <Compile Include="Interfaces\ISearchResultsConsumer.cs" />
+    <Compile Include="Interfaces\ISearchBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DTOs\SearchComponents.cs" />
     <Compile Include="SearchEngineBase.cs" />
     <Compile Include="SearchEngineWrapper.cs" />
-    <Compile Include="SearchManager.cs" />
-    <Compile Include="SearchManagerFactoryBase.cs" />
-    <Compile Include="SearchResults.cs" />
+    <Compile Include="SearchBox.cs" />
+    <Compile Include="SearchManagerBase.cs" />
+    <Compile Include="SearchResultsConsumer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
