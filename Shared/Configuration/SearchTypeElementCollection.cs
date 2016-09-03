@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 
 namespace TheSeeker.Configuration
 {
     public class SearchTypeElementCollection : ConfigurationElementCollection
     {
-        public new SearchTypeElement this[string typeName]
+        public new ISearchTypeConfiguration this[string typeName]
         {
             get
             {
-                return (SearchTypeElement)BaseGet(typeName);
+                return (ISearchTypeConfiguration)BaseGet(typeName);
             }
         }
 

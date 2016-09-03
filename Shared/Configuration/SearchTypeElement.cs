@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 
 namespace TheSeeker.Configuration
 {
-    public class SearchTypeElement : ConfigurationElement
+    public class SearchTypeElement : ConfigurationElement, ISearchTypeConfiguration
     {
         /// <summary>
         /// Node name in application configuration file
         /// </summary>
-        internal const string Name = "SearchType";
+        public static readonly string Name = "SearchType";
 
         /// <summary>
         /// Type of items produced by Search Engine that transport found item data

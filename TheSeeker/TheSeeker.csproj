@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="Configuration\CurrentFormsSearchConfiguration.cs" />
     <Compile Include="Components\IconFromHandleWrapper.cs" />
+    <Compile Include="Interfaces\ICanHide.cs" />
+    <Compile Include="Interfaces\ISearchForm.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -94,6 +96,10 @@
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{9652f0b6-db64-43a2-9372-ce6b37127dbc}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{9edbb8e8-d2a0-43ce-a769-0f26196acd4b}</Project>
+      <Name>Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Startup\SearchManagerFactory.csproj">
       <Project>{7031cdb7-ca61-4894-8cc0-bd2789e7f677}</Project>

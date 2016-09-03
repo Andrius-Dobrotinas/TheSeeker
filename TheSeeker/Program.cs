@@ -18,17 +18,20 @@ namespace TheSeeker.Forms
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
+            
             CurrentFormsSearchConfiguration configCurrent;
             ISearchManager searchManager;
 
-            // Create a Search Manager sort of injecting desired types read from config
+            // Create a Search Manager sort of injecting desired types from config
             try
             {
-                // Read configuration and get Search Type
+                // Read configuration
                 configCurrent = ((CurrentFormsSearchConfiguration)ConfigurationManager.GetSection(CurrentFormsSearchConfiguration.Name));
+                if (string.IsNullOrEmpty(configCurrent.SearchType))
+                    throw new ConfigurationErrorsException("\"SearchType\" cannot be empty");
 
-                searchManager = Initialization.SearchManagerFactory.CreateNew(configCurrent);
+                searchManager = Initialization.SearchManagerFactory.CreateNew(configCurrent,
+                    ((SearchTypesConfigurationSection)ConfigurationManager.GetSection(SearchTypeElement.Name)).SearchTypes[configCurrent.SearchType]);
             }
             catch (Exception e)
             {
@@ -39,16 +42,7 @@ namespace TheSeeker.Forms
             // Run Search Manager
             try
             {
-                InitiateSearchDelegate initSearch = (searchLocation, searchPattern) =>
-                {
-                    if (!searchManager.SearchBox.IsSearching)
-                    {
-                        return searchManager.SearchBox.Search(searchLocation, searchPattern);
-                    }
-                    return false;
-                };
-
-                using (var searchForm = new SearchForm(initSearch))
+                using (var searchForm = new SearchForm(searchManager.SearchBox))
                 using (var bitmapIcon = new IconFromHandleWrapper(Resources.TrayIcon))
                 using (ISystemTrayIcon trayIcon = new SystemTrayIcon()
                 {
@@ -59,17 +53,6 @@ namespace TheSeeker.Forms
                     CreateTrayIconMenuItems(trayIcon, searchForm);
 
                     searchForm.HandleCreated += (sender, e) => trayIcon.Visible = true;
-                    searchForm.CancelSearch += (sender, e) =>
-                    {
-                        searchManager.SearchBox.Stop();
-                    };
-                    searchManager.SearchBox.SearchStopped += (sender, e) => searchForm.SearchStopped();
-
-                    // On exit, cancel and wait for search to completely stop to allow for proper disposal of objects
-                    searchForm.FormClosed += (sender, e) =>
-                    {
-                        searchManager.SearchBox.StopAndWait();
-                    };
 
                     Application.Run(searchForm);
                 }
@@ -84,7 +67,7 @@ namespace TheSeeker.Forms
             }
         }
 
-        private static void CreateTrayIconMenuItems(ISystemTrayIcon trayIcon, SearchForm form)
+        private static void CreateTrayIconMenuItems(ISystemTrayIcon trayIcon, ISearchForm form)
         {
             // Make "Show/Hide" menu item text change according to the current state of the owner
             EventHandler onDoubleClick = (sender, e) =>

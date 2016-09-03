@@ -4,7 +4,7 @@ using System.Configuration;
 
 namespace TheSeeker.Configuration
 {
-    public abstract class CurrentSearchConfiguration : ConfigurationSection
+    public abstract class CurrentSearchConfiguration : ConfigurationSection, ICurrentSearchConfiguration
     {
         /// <summary>
         /// Type of items produced by Search Engine that transport found item data

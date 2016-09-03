@@ -19,14 +19,16 @@ namespace TheSeeker.Initialization
         /// </summary>
         /// <param name="config">Configuration section for the desired search type</param>
         /// <returns></returns>
-        public static ISearchManager CreateNew(CurrentSearchConfiguration config)
+        public static ISearchManager CreateNew(ICurrentSearchConfiguration currentConfig, ISearchTypeConfiguration searchTypeConfig)
         {
-            if (string.IsNullOrEmpty(config.SearchType))
+            if (currentConfig == null)
+                throw new ArgumentNullException(nameof(currentConfig));
+            if (searchTypeConfig == null)
+                throw new ArgumentNullException(nameof(searchTypeConfig));
+            if (string.IsNullOrEmpty(currentConfig.SearchType))
                 throw new ConfigurationErrorsException("\"SearchType\" cannot be empty");
 
-            Type searchType = Type.GetType(config.SearchType, true);
-
-            var searchTypeConfig = ((SearchTypesConfigurationSection)ConfigurationManager.GetSection(SearchTypeElement.Name)).SearchTypes[searchType.FullName];
+            Type searchType = Type.GetType(currentConfig.SearchType, true);
 
             // Get types and create instances
             TypeInstance searchEngine = default(TypeInstance);
@@ -48,7 +50,7 @@ namespace TheSeeker.Initialization
                 searchEngineWrapper.Instance = Activator.CreateInstance(searchEngineWrapper.Type, searchEngine.Instance);
 
                 // Operation Tracker
-                operationTracker = CreateTypeInstance(config, c => c.OperationTrackerType, typeof(IOperationTracker), null, config.ListRefreshInterval);
+                operationTracker = CreateTypeInstance(currentConfig, c => c.OperationTrackerType, typeof(IOperationTracker), null, currentConfig.ListRefreshInterval);
 
                 // Search Manager Factory
                 Type iSearchManagerGenericType = typeof(ISearchManager<>).MakeGenericType(searchType);

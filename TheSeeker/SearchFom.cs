@@ -8,41 +8,19 @@ using TheSeeker.Forms.Properties;
 
 namespace TheSeeker.Forms
 {
-    /// <summary>
-    /// Delegate type that is intended for initiating a new search. Returns a value indicating whether a new search has been started
-    /// </summary>
-    /// <param name="searchLocation"></param>
-    /// <param name="searchPattern"></param>
-    /// <returns></returns>
-    public delegate bool InitiateSearchDelegate(string searchLocation, string searchPattern);
-
-    public partial class SearchForm : Form
+    public partial class SearchForm : Form, ISearchForm
     {
-        private InitiateSearchDelegate initiateSearchDelegate;
+        public ISearchBox SearchBox { get; private set; }
 
-        /// <summary>
-        /// Occurs when the form cancels current search
-        /// </summary>
-        public event EventHandler CancelSearch;
-
-        /// <summary>
-        /// Occurs when the form cancels current search and wants to block until search stops
-        /// </summary>
-        public event EventHandler CancelSearchAndBlock;
-
-        public SearchForm()
+        public SearchForm(ISearchBox searchBox)
         {
+            if (searchBox == null)
+                throw new ArgumentNullException(nameof(searchBox));
+            SearchBox = searchBox;
+
             InitializeComponent();
-        }
 
-        /// <summary>
-        /// Search form
-        /// </summary>
-        /// <param name="initSearchDelegate">Delegate that will be run each time search is initialized from within this form</param>
-        /// <param name="settings">Application settings for this window</param>
-        public SearchForm(InitiateSearchDelegate initSearchDelegate) : this()
-        {
-            initiateSearchDelegate = initSearchDelegate;
+            // Window position load/save
             DesktopLocation = Settings.Default.WindowLocation;
             LocationChanged += (sender, e) =>
             {
@@ -54,8 +32,8 @@ namespace TheSeeker.Forms
 
         private void Cancel_Click(object sender, EventArgs e)
         {
-            CancelSearch?.Invoke(sender, EventArgs.Empty);
             Cancel.Enabled = false;
+            SearchBox.Stop();
         }
 
         private void SearchPattern_KeyPress(object sender, KeyPressEventArgs e)
@@ -68,15 +46,14 @@ namespace TheSeeker.Forms
 
         private void CallSearch()
         {
-            Cancel.Enabled = initiateSearchDelegate?.Invoke(SearchLocation.Text, SearchPattern.Text) == true;
+            if (SearchBox.Search(SearchLocation.Text, SearchPattern.Text))
+                Cancel.Enabled = true;
         }
 
-        /// <summary>
-        /// Method must be run when search is stops/finishes
-        /// </summary>
-        public void SearchStopped()
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            Cancel.Enabled = false;
+            SearchBox.StopAndWait();
+            base.OnFormClosing(e);
         }
     }
 }
