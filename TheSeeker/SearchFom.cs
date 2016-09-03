@@ -12,6 +12,9 @@ namespace TheSeeker.Forms
     {
         public ISearchBox SearchBox { get; private set; }
 
+        /// <summary>
+        /// Creates new Search Form with the supplied Search box and adds items to the supplied Context menu
+        /// </summary>
         public SearchForm(ISearchBox searchBox)
         {
             if (searchBox == null)
@@ -28,6 +31,23 @@ namespace TheSeeker.Forms
                 Settings.Default.WindowLocation = DesktopLocation;
                 Settings.Default.Save();
             };
+        }
+        /// <summary>
+        /// Creates new Search Form with the supplied Search box and adds items to the supplied Context menu
+        /// </summary>
+        public SearchForm(ISearchBox searchBox, ContextMenuStrip contextMenu) : this(searchBox)
+        {
+            // Create Cancel/Search menu item
+            var actMenuItem = new ToolStripMenuItem();
+            actMenuItem.Click += (sender, e) =>
+            {
+                if (SearchBox.IsSearching)
+                    Cancel_Click(this, EventArgs.Empty);
+                else
+                    CallSearch();
+            };
+            contextMenu.Opening += (sender, e) => actMenuItem.Text = SearchBox.IsSearching ? "Cancel" : "Search";
+            contextMenu.Items.Add(actMenuItem);
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -46,8 +66,11 @@ namespace TheSeeker.Forms
 
         private void CallSearch()
         {
-            if (SearchBox.Search(SearchLocation.Text, SearchPattern.Text))
-                Cancel.Enabled = true;
+            if (!string.IsNullOrWhiteSpace(SearchLocation.Text) && string.IsNullOrWhiteSpace(SearchPattern.Text))
+            {
+                if (SearchBox.Search(SearchLocation.Text, SearchPattern.Text))
+                    Cancel.Enabled = true;
+            }
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)

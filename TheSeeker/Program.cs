@@ -8,6 +8,8 @@ using TheSeeker.Forms.Properties;
 
 namespace TheSeeker.Forms
 {
+    // TODO: implement simple loggin mechanism
+
     static class Program
     {
         /// <summary>
@@ -42,13 +44,13 @@ namespace TheSeeker.Forms
             // Run Search Manager
             try
             {
-                using (var searchForm = new SearchForm(searchManager.SearchBox))
                 using (var bitmapIcon = new IconFromHandleWrapper(Resources.TrayIcon))
                 using (ISystemTrayIcon trayIcon = new SystemTrayIcon()
                 {
                     Text = Application.ProductName,
                     Icon = bitmapIcon.Icon
                 })
+                using (var searchForm = new SearchForm(searchManager.SearchBox, trayIcon.Menu))
                 {
                     CreateTrayIconMenuItems(trayIcon, searchForm);
 
@@ -82,12 +84,6 @@ namespace TheSeeker.Forms
             trayIcon.Menu.Opening += (sender, e) => showMenuItem.Text = form.Visible ? "Hide" : "Show";
 
             trayIcon.AddMenuItem("Exit", (sender, e) => Application.Exit());
-
-            // TODO: add some more menu items
-            /*var cancelMenuItem = trayIcon.AddMenuItem("Cancel", (sender, e) => form.CancelButton.PerformClick());
-            
-
-            trayIcon.AddMenuItem("Show", (sender, e) => Application.Exit());*/
         }
     }
 }
