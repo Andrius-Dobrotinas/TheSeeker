@@ -53,7 +53,7 @@
       <Project>{35e7eee3-d9a6-44c7-b9da-42195e163ae6}</Project>
       <Name>FormsSearchResults</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Startup\SearchManagerFactory.csproj">
+    <ProjectReference Include="..\SearchManagerFactory\SearchManagerFactory.csproj">
       <Project>{7031cdb7-ca61-4894-8cc0-bd2789e7f677}</Project>
       <Name>SearchManagerFactory</Name>
     </ProjectReference>

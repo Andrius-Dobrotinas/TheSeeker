@@ -26,7 +26,7 @@ namespace TheSeeker.Initialization
             if (searchTypeConfig == null)
                 throw new ArgumentNullException(nameof(searchTypeConfig));
             if (string.IsNullOrEmpty(currentConfig.SearchType))
-                throw new ConfigurationErrorsException("\"SearchType\" cannot be empty");
+                throw new ArgumentException("Configuration item value cannot be empty", "SearchType");
 
             Type searchType = Type.GetType(currentConfig.SearchType, true);
 
@@ -99,7 +99,7 @@ namespace TheSeeker.Initialization
                 string typeName = pinfo.GetValue(config) as string;
 
                 if (string.IsNullOrEmpty(typeName))
-                    throw new ConfigurationErrorsException("No type name specified");
+                    throw new ArgumentException("Type name not specified", "SearchType");
             
                 return TypeInstantiator.CreateInstance(typeName, requiredInterfaceType, genericTypeArguments, arguments);
             }

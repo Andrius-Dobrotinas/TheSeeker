@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SearchEngines", "SearchEngi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SearchResultsConsumers", "SearchResultsConsumers", "{8466B78E-1CC8-4BC5-9BC9-F3BD29692195}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchManagerFactory", "Startup\SearchManagerFactory.csproj", "{7031CDB7-CA61-4894-8CC0-BD2789E7F677}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchManagerFactory", "SearchManagerFactory\SearchManagerFactory.csproj", "{7031CDB7-CA61-4894-8CC0-BD2789E7F677}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{9EDBB8E8-D2A0-43CE-A769-0F26196ACD4B}"
 EndProject
