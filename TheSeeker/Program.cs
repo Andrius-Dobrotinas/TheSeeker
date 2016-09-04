@@ -18,7 +18,7 @@ namespace TheSeeker.Forms
         [STAThread]
         static void Main()
         {
-            Logging.ILogger log = new Logging.DefaultTextTraceSourceLogger("Default");
+            Logging.ILogger log = new Logging.DefaultTextTraceSourceLogger("Main");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

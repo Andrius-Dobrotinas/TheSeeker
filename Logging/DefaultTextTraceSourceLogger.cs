@@ -13,20 +13,29 @@ namespace TheSeeker.Logging
         protected FileStream fileStream;
         protected TextWriterTraceListener textListener;
 
+        /// <summary>
+        /// Instantiates new logger
+        /// </summary>
+        /// <param name="name">Logger name</param>
         public DefaultTextTraceSourceLogger(string name)
         {
             var logFileName = ConfigurationManager.AppSettings["logFileName"];
             if (string.IsNullOrWhiteSpace(logFileName))
                 throw new ArgumentException("Configuration element is empty", "logFileName");
 
-            trace = new TraceSource(name, SourceLevels.All);
+            // Check if it's absolute or relative path name
+            if (logFileName.StartsWith("\\") || logFileName.StartsWith("/"))
+                logFileName = Path.Combine(Directory.GetCurrentDirectory(), logFileName.Substring(1));
 
+            // Create file if it doesn't exist
             if (!File.Exists(logFileName))
-                File.Create(logFileName);
+                File.Create(logFileName).Dispose();
 
             fileStream = new FileStream(logFileName, FileMode.Append, FileAccess.Write, FileShare.Read);
 
             textListener = new TextWriterTraceListener(fileStream);
+
+            trace = new TraceSource(name, SourceLevels.All);
             trace.Listeners.Add(textListener);
         }
 
