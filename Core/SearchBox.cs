@@ -41,7 +41,7 @@ namespace TheSeeker
         /// <summary>
         /// Occurs immediately after a request to stop current search when calling non-waiting Stop method
         /// </summary>
-        public event EventHandler SearchStopped;
+        public event EventHandler<TimeSpan> SearchStopped;
 
         /// <summary>
         /// Initializes Search Manager with the supplied search engine and search results handler
@@ -50,6 +50,11 @@ namespace TheSeeker
         /// <param name="searchResultsHandler"></param>
         public SearchBox(ISearchEngineWrapper<TResult> searchEngine, ISearchResultsConsumer<TResult> searchResults)
         {
+            if (searchEngine == null)
+                throw new ArgumentNullException(nameof(searchEngine));
+            if (searchResults == null)
+                throw new ArgumentNullException(nameof(searchResults));
+
             this.searchEngine = searchEngine;
             results = searchResults;
             searchEngine.ItemFoundHandler += (item) => results.Add(item);
@@ -73,6 +78,8 @@ namespace TheSeeker
                 {
                     searchEngine.Search(searchLocation, searchPattern, searchCancellation.Token);
                 }, searchCancellation.Token);
+
+                // TODO: handle search exceptions (maybe invoke an OnExecption event handler from ContinuationTask or something like that?
 
                 return true;
             }
@@ -104,7 +111,7 @@ namespace TheSeeker
             if (wait)
                 searchTask?.Wait();
             else
-                SearchStopped?.Invoke(this, EventArgs.Empty);
+                SearchStopped?.Invoke(this, searchEngine.TimeElapsed);
         }
 
         #region IDisposable Support

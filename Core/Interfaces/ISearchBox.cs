@@ -34,6 +34,6 @@ namespace TheSeeker
         /// <summary>
         /// Occurs immediately after a request to stop current search when calling non-waiting Stop method
         /// </summary>
-        event EventHandler SearchStopped;
+        event EventHandler<TimeSpan> SearchStopped;
     }
 }

@@ -31,6 +31,10 @@ namespace TheSeeker.Forms
                 Settings.Default.WindowLocation = DesktopLocation;
                 Settings.Default.Save();
             };
+
+            EventHandler<TimeSpan> searchStoppedDelegate = (sender, t) => Invoke(new Action(() => Cancel.Enabled = false));
+            searchBox.SearchStopped += searchStoppedDelegate;
+            searchBox.SearchFinished += searchStoppedDelegate;
         }
         /// <summary>
         /// Creates new Search Form with the supplied Search box and adds items to the supplied Context menu
@@ -66,7 +70,7 @@ namespace TheSeeker.Forms
 
         private void CallSearch()
         {
-            if (!string.IsNullOrWhiteSpace(SearchLocation.Text) && string.IsNullOrWhiteSpace(SearchPattern.Text))
+            if (!string.IsNullOrWhiteSpace(SearchLocation.Text) && !string.IsNullOrWhiteSpace(SearchPattern.Text))
             {
                 if (SearchBox.Search(SearchLocation.Text, SearchPattern.Text))
                     Cancel.Enabled = true;

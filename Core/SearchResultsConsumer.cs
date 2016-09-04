@@ -16,6 +16,9 @@ namespace TheSeeker
 
         public SearchResultsConsumer(ICollection<TResult> resultsCollection)
         {
+            if (resultsCollection == null)
+                throw new ArgumentNullException(nameof(resultsCollection));
+
             ResultsCollection = resultsCollection;
         }
 

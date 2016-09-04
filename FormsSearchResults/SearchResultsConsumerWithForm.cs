@@ -11,6 +11,9 @@ namespace TheSeeker.Forms
         public SearchResultsConsumerWithForm(ICollection<TResult> resultsCollection, ISearchResultsConsumerControl<TResult> searchResultsForm) :
             base(resultsCollection)
         {
+            if (searchResultsForm == null)
+                throw new ArgumentNullException(nameof(searchResultsForm));
+
             SearchResultsForm = searchResultsForm;
         }
 

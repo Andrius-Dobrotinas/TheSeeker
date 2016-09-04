@@ -18,6 +18,8 @@ namespace TheSeeker.Forms
         [STAThread]
         static void Main()
         {
+            Logging.ILogger log = new Logging.DefaultTextTraceSourceLogger("Default");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             
@@ -37,7 +39,8 @@ namespace TheSeeker.Forms
             }
             catch (Exception e)
             {
-                MessageBox.Show($"Failed to instantiate Search manager. Reason:\n{e.InnerException?.Message ?? e.Message}");
+                log.LogError("Failed to instantiate Search manager", e.InnerException ?? e);
+                MessageBox.Show($"Failed to instantiate Search manager. See log for details");
                 return;
             }
 
@@ -61,7 +64,8 @@ namespace TheSeeker.Forms
             }
             catch (Exception e)
             {
-                MessageBox.Show($"An error has occured:\n{e.Message}");
+                log.LogError("An error has occured", e);
+                MessageBox.Show("An error has occured. See log for details");
             }
             finally
             {

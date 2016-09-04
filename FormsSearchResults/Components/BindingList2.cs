@@ -25,6 +25,11 @@ namespace TheSeeker.Forms
         /// <param name="consumerControl">A control that will use this binding list as its data source</param>
         public BindingList2(IOperationTracker operationTracker, IDataConsumerControl<TListItem> consumerControl)
         {
+            if (operationTracker == null)
+                throw new ArgumentNullException(nameof(operationTracker));
+            if (consumerControl == null)
+                throw new ArgumentNullException(nameof(consumerControl));
+
             this.consumerControl = consumerControl;
             consumerControl.DataSource = this;
 

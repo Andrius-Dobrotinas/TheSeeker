@@ -97,6 +97,10 @@
       <Project>{9652f0b6-db64-43a2-9372-ce6b37127dbc}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{88ea0f53-c4bd-44b0-9709-3270e682240c}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shared\Shared.csproj">
       <Project>{9edbb8e8-d2a0-43ce-a769-0f26196acd4b}</Project>
       <Name>Shared</Name>
@@ -108,6 +112,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\TrayIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Logging.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

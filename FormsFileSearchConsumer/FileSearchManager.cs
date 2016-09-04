@@ -14,6 +14,11 @@ namespace TheSeeker.FileSystem.Forms
     {
         public override void Create(ISearchEngineWrapper<TResult> searchEngineWrapper, IOperationTracker operationTracker)
         {
+            if (searchEngineWrapper == null)
+                throw new ArgumentNullException(nameof(searchEngineWrapper));
+            if (operationTracker == null)
+                throw new ArgumentNullException(nameof(operationTracker));
+
             SearchEngineWrapper = searchEngineWrapper;
             OperationTracker = operationTracker;
             form = new FileSearchResultsForm<TResult>();

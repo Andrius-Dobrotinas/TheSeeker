@@ -15,6 +15,8 @@ namespace TheSeeker.FileSystem
         public override void Search(string location, string searchPattern, CancellationToken cancellationToken)
         {
             DirectoryInfo root = new DirectoryInfo(location);
+            if (!root.Exists)
+                return;
 
             foreach (var directory in new[] { root }.Union(root.EnumerateDirectories(searchPattern, SearchOption.AllDirectories)).AsParallel())
             {
