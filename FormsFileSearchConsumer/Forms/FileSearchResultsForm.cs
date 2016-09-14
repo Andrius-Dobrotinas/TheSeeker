@@ -10,7 +10,7 @@ namespace TheSeeker.FileSystem.Forms
 {
     public class FileSearchResultsForm<TResult> : SearchResultsForm<TResult> where TResult : FileSystemInfo
     {
-        public FileSearchResultsForm()
+        public FileSearchResultsForm(IFormSettingsProvider formSettings) : base(formSettings)
         {
             // Add menu items to the Context Menu
 

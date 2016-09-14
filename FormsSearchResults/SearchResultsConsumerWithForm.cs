@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheSeeker.Forms
+namespace TheSeeker.Forms.SearchResults
 {
     public class SearchResultsConsumerWithForm<TResult> : SearchResultsConsumer<TResult>
     {

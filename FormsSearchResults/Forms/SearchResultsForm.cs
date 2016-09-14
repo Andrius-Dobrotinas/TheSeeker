@@ -20,7 +20,7 @@ namespace TheSeeker.Forms
         public ListBox ResultList => list;
 
         protected ContextMenuStrip ListContextMenu => listContextMenu;
-
+        
         public event EventHandler FormHide;
 
         public event EventHandler DataSourceChanged
@@ -39,10 +39,25 @@ namespace TheSeeker.Forms
         /// Creates a form and associates it with the supplied search resuls source
         /// </summary>
         /// <param name="resultsSource">Data source for the list that holds search results</param>
-        public SearchResultsForm()
+        public SearchResultsForm(IFormSettingsProvider formSettings)
         {
             InitializeComponent();
-            SetWindowPropertiesFromSettings();
+
+            // Set window properties from settings
+            DesktopLocation = formSettings.DesktopLocation;
+            Width = formSettings.Width;
+            Height = formSettings.Height;
+
+            // Init event handlers for saving window properties to settings
+            LocationChanged += (sender, e) =>
+            {
+                formSettings.DesktopLocation = DesktopLocation;
+            };
+            ResizeEnd += (sender, e) =>
+            {
+                formSettings.Width = Width;
+                formSettings.Height = Height;
+            };
 
             // Cache data source (result list)
             ResultList.DataSourceChanged += (source, e) =>
@@ -55,26 +70,6 @@ namespace TheSeeker.Forms
                     UpdateUi(() => lblResultsCount.Text = (resultListCached as ICollection<TResult>).Count.ToString());
                 };
             };
-
-            // Save window properties to settings
-            LocationChanged += (sender, e) =>
-            {
-                Settings.Default.ResultsFormLocation = DesktopLocation;
-                Settings.Default.Save();
-            };
-            ResizeEnd += (sender, e) =>
-            {
-                Settings.Default.ResultsFormWidth = Width;
-                Settings.Default.ResultsFormHeight = Height;
-                Settings.Default.Save();
-            };
-        }
-
-        protected void SetWindowPropertiesFromSettings()
-        {
-            DesktopLocation = Settings.Default.ResultsFormLocation;
-            Width = Settings.Default.ResultsFormWidth;
-            Height = Settings.Default.ResultsFormHeight;
         }
 
         /// <summary>

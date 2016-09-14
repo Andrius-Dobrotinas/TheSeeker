@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TheSeeker.Forms;
+using TheSeeker.Forms.SearchResults;
 
 namespace TheSeeker.FileSystem.Forms
 {
@@ -21,7 +22,8 @@ namespace TheSeeker.FileSystem.Forms
 
             SearchEngineWrapper = searchEngineWrapper;
             OperationTracker = operationTracker;
-            form = new FileSearchResultsForm<TResult>();
+            formSettings = new DefaultFormSettingsProvider();
+            form = new FileSearchResultsForm<TResult>(formSettings);
             BindingList2<TResult> resultsList = new BindingList2<TResult>(operationTracker, form);
 
             var consumer = new SearchResultsConsumerWithForm<TResult>(resultsList, form);
@@ -50,12 +52,16 @@ namespace TheSeeker.FileSystem.Forms
 
         private SearchResultsForm<TResult> form;
         private ISearchResultsConsumer searchResultsConsumer;
+        private IFormSettingsProvider formSettings;
 
         #region IDisposable Support
         protected override void OnDispose()
         {
             (searchResultsConsumer as IDisposable)?.Dispose();
             form.Dispose();
+
+            // Save form settings
+            formSettings.Save();
         }
         #endregion
     }

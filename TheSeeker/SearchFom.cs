@@ -15,7 +15,7 @@ namespace TheSeeker.Forms
         /// <summary>
         /// Creates new Search Form with the supplied Search box and adds items to the supplied Context menu
         /// </summary>
-        public SearchForm(ISearchBox searchBox)
+        public SearchForm(IFormSettingsProvider formSettings, ISearchBox searchBox)
         {
             if (searchBox == null)
                 throw new ArgumentNullException(nameof(searchBox));
@@ -24,12 +24,11 @@ namespace TheSeeker.Forms
             InitializeComponent();
 
             // Window position load/save
-            DesktopLocation = Settings.Default.WindowLocation;
+            DesktopLocation = formSettings.DesktopLocation;
             LocationChanged += (sender, e) =>
             {
                 // Save window position
-                Settings.Default.WindowLocation = DesktopLocation;
-                Settings.Default.Save();
+                formSettings.DesktopLocation = DesktopLocation;
             };
 
             EventHandler<TimeSpan> searchStoppedDelegate = (sender, t) => Invoke(new Action(() => Cancel.Enabled = false));
@@ -39,7 +38,7 @@ namespace TheSeeker.Forms
         /// <summary>
         /// Creates new Search Form with the supplied Search box and adds items to the supplied Context menu
         /// </summary>
-        public SearchForm(ISearchBox searchBox, ContextMenuStrip contextMenu) : this(searchBox)
+        public SearchForm(IFormSettingsProvider formSettings, ISearchBox searchBox, ContextMenuStrip contextMenu) : this(formSettings, searchBox)
         {
             // Create Cancel/Search menu item
             var actMenuItem = new ToolStripMenuItem();

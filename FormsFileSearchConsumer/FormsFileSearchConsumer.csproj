@@ -49,6 +49,10 @@
       <Project>{9652f0b6-db64-43a2-9372-ce6b37127dbc}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FormsCore\FormsCore.csproj">
+      <Project>{545185b8-f66a-4c22-9024-f8324cec5149}</Project>
+      <Name>FormsCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FormsSearchResults\FormsSearchResults.csproj">
       <Project>{35e7eee3-d9a6-44c7-b9da-42195e163ae6}</Project>
       <Name>FormsSearchResults</Name>

@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheSeeker", "TheSeeker\TheSeeker.csproj", "{CED5935A-E6B5-4302-8720-9CB1D767737A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FB77FD04-0670-4F53-9C02-F44403BCCB08} = {FB77FD04-0670-4F53-9C02-F44403BCCB08}
+		{C0DD0FBF-6CAB-4931-904F-9E481C6F4BAA} = {C0DD0FBF-6CAB-4931-904F-9E481C6F4BAA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{9652F0B6-DB64-43A2-9372-CE6B37127DBC}"
 EndProject
@@ -22,6 +26,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{9EDBB8E8-D2A0-43CE-A769-0F26196ACD4B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{88EA0F53-C4BD-44B0-9709-3270E682240C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsCore", "FormsCore\FormsCore.csproj", "{545185B8-F66A-4C22-9024-F8324CEC5149}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Injectable Components", "Injectable Components", "{C7B0A2C5-FF2C-4CB8-880D-41C32F76F934}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +69,10 @@ Global
 		{88EA0F53-C4BD-44B0-9709-3270E682240C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88EA0F53-C4BD-44B0-9709-3270E682240C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88EA0F53-C4BD-44B0-9709-3270E682240C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{545185B8-F66A-4C22-9024-F8324CEC5149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{545185B8-F66A-4C22-9024-F8324CEC5149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{545185B8-F66A-4C22-9024-F8324CEC5149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{545185B8-F66A-4C22-9024-F8324CEC5149}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,5 +80,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FB77FD04-0670-4F53-9C02-F44403BCCB08} = {8466B78E-1CC8-4BC5-9BC9-F3BD29692195}
 		{C0DD0FBF-6CAB-4931-904F-9E481C6F4BAA} = {54B023B4-0AAC-4D3B-B014-11030EF2CA9A}
+		{54B023B4-0AAC-4D3B-B014-11030EF2CA9A} = {C7B0A2C5-FF2C-4CB8-880D-41C32F76F934}
+		{8466B78E-1CC8-4BC5-9BC9-F3BD29692195} = {C7B0A2C5-FF2C-4CB8-880D-41C32F76F934}
 	EndGlobalSection
 EndGlobal
