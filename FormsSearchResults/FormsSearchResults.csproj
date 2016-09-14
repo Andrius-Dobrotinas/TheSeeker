@@ -40,7 +40,6 @@
   <ItemGroup>
     <Compile Include="Components\BindingList2.cs" />
     <Compile Include="DefaultFormSettingsProvider.cs" />
-    <Compile Include="FormsHelper.cs" />
     <Compile Include="Forms\SearchResultsForm.cs">
       <SubType>Form</SubType>
     </Compile>

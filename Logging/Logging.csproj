@@ -37,7 +37,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ILogger.cs" />
+    <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="DefaultTextTraceSourceLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
